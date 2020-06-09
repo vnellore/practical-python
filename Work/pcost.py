@@ -4,6 +4,7 @@
 import csv
 import sys
 
+
 def portfolio_cost(filename):
 
     with open(filename) as file:
@@ -16,7 +17,7 @@ def portfolio_cost(filename):
                 name, shares, price = line
                 total_cost += float(shares) * float(price)
             except Exception:
-                print('Exception occurred')  
+                print('Exception occurred')
     return total_cost
 
 

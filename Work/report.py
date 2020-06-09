@@ -12,7 +12,8 @@ def read_portfolio(filename):
         next(rows)
 
         for row in rows:
-            holding = {'name': row[0], 'shares': int(row[1]), 'price': float(row[2])}
+            holding = {'name': row[0], 'shares': int(row[1]),
+                       'price': float(row[2])}
             portfolio.append(holding)
 
     return portfolio
@@ -31,18 +32,22 @@ def read_prices(filename):
     return prices
 
 
+def make_report(portfolio, prices):
+    report = []
+    for x in portfolio:
+        row = (x['name'], x['shares'], prices[x['name']],
+               prices[x['name']] - x['price'])
+        report.append(row)
+    headers = ('Name', 'Shares', 'Price', 'Change')
+
+    print(f'{headers[0]:>10s} {headers[1]:>10s} {headers[2]:>10s} {headers[3]:>10s}')
+    print('%10s %10s %10s %10s' % ('-' * 10, '-' * 10, '-' * 10, '-' * 10))
+    for name, shares, price, change in report:
+        print(f'{name:>10s} {shares:>10d} {price:>10.2f} {change:>10.2f}')
+
+    return report
+
+
 portfolio = read_portfolio('Data/portfolio.csv')
 prices = read_prices('Data/prices.csv')
-
-initial_portfolio_value = 0.0
-current_portfolio_value = 0.0
-for holding in portfolio:
-    name, shares, price = holding['name'], holding['shares'], holding['price']
-    initial_portfolio_value += shares * price
-    current_portfolio_value += prices[name] * shares
-
-
-print(f'Initial portfolio value is {initial_portfolio_value}')
-print(f'Current portfolio value is {current_portfolio_value}')
-
-print(f'Net gain is {current_portfolio_value - initial_portfolio_value}')
+make_report(portfolio, prices)
